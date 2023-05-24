@@ -9,9 +9,11 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
+#define MAX_ARGS 10
+
 extern char **environ;
 
 int file_exists(const char *filename);
-void execute_command(char *line);
+void execute_command(char **args);
 
 #endif

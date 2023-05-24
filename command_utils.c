@@ -3,18 +3,17 @@
 /**
  * execute_command - executes by forking a child process and calls execve
  *
- * @line: The command to execute
+ * @args: The command to execute
  * Return: 1 on success, 0 on fail
  */
 
-void execute_command(char *line)
+void execute_command(char **args)
 {
 	pid_t pid;
-	char *args[2];
 
-	if (!file_exists(line))
+	if (!file_exists(args[0]))
 	{
-		printf("Error: Command not found: %s\n", line);
+		printf("Error: Command not found: %s\n", args[0]);
 		return;
 	}
 
@@ -27,10 +26,8 @@ void execute_command(char *line)
 	}
 	else if (pid == 0)
 	{
-		args[0] = line;
-		args[1] = NULL;
 
-		if (execve(line, args, environ) == -1)
+		if (execve(args[0], args, environ) == -1)
 		{
 			perror("Error: command execution failed");
 			exit(EXIT_FAILURE);

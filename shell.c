@@ -8,12 +8,16 @@
 
 int main(void)
 {
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
-
 	while (1)
 	{
+		char *line = NULL;
+		size_t len = 0;
+		ssize_t read;
+
+		char *token;
+		char **args = malloc(sizeof(char *) * MAX_ARGS);
+		int arg_count = 0;
+
 		write(1, "& ", 2);
 		read = getline(&line, &len, stdin);
 
@@ -39,9 +43,20 @@ int main(void)
 			line[read - 1] = '\0';
 		}
 
-		execute_command(line);
+		token = strtok(line, " ");
+		while (token != NULL && arg_count < MAX_ARGS)
+		{
+			args[arg_count] = token;
+			arg_count++;
+			token = strtok(NULL, " ");
+		}
+		args[arg_count] = NULL;
+
+		execute_command(args);
+
+		free(args);
+		free(line);
 	}
 
-	free(line);
 	return (0);
 }
